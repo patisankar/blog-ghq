@@ -1,0 +1,14 @@
+type Blog {
+  id: ID!
+  title: String!
+  author: Author!
+}
+
+type Author {
+  id: ID!
+  name: String!
+}
+
+type Query {
+  blogs(ids: [ID!]!): [Blog!]!
+}
