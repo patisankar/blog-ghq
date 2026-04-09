@@ -6,6 +6,29 @@ This project is a Spring Boot GraphQL demo inspired by Shopify's breadth-first e
 - **Breadth (Batch) Resolver**: Fetches authors in batches (DataLoader style)
 - **Depth Resolver**: Fetches authors one-by-one (N+1 style)
 
+## STAR
+**Situation**
+
+At PayPal scale, our GraphQL APIs were serving large datasets such as transaction histories. We observed that latency increased significantly for high-volume queries.
+
+Upon analysis, we found the root cause was the default Depth-First Execution (DFE) model in GraphQL, where each field resolver was executed per object. For large datasets, this resulted in thousands of repeated resolver executions and excessive async overhead.
+
+**Task**
+
+We needed to optimize API performance for large queries without changing the client contract, by addressing inefficiencies in the GraphQL execution model itself, particularly reducing the cost of DFE.
+
+**Action**
+
+We redesigned our resolver strategy to mimic Breadth-First Execution (BFE) behavior.
+
+Instead of resolving fields per object (DFE), we resolved fields across all objects together (BFE)
+
+Introduced batching via DataLoader / batch resolvers
+
+Refactored services to support bulk APIs (e.g., fetch transactions for multiple accounts in one call)
+
+Reduced repeated resolver invocations and async promise chains
+
 ## How to Run
 
 ```
